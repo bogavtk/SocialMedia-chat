@@ -25,27 +25,23 @@ class UserData():
 
     def add_user(self, user):
         with open(self.path, 'a') as file:
-            writer = csv.DictWriter(file, delimiter=';',
+            writer = csv.DictWriter(file, delimiter=',',
                                     fieldnames=self.columns)
 
             writer.writerow(user.get_information())
 
     def delete_user(self, id):
-        reader = open(self.path, 'rb')
-
-
-
-
-
-    def get_user(self, user_id):
-        with open(self.path, 'r') as file:
-            user_o = None
-            reader = csv.DictReader(file, delimiter=';',
-                                    fieldnames=self.columns)
-            for user_csv in reader:
-                if user_csv['id'] == user_id:
-                    user_o = user_csv
-            return user_csv
+        line = []
+        with open('messages.csv', 'r') as readFile:
+            reader = csv.reader(readFile)
+            for row in reader:
+                line.append(row)
+                for field in row:
+                    if field == id:
+                        line.remove(row)
+        with open('messages.csv', 'w') as writeFile:
+            writer = csv.writer(writeFile)
+            writer.writerows(line)
 
 
 data_obj = UserData('messages.csv', ['id', 'name', 'age', 'sex', 'time'])
@@ -53,7 +49,7 @@ data_obj = UserData('messages.csv', ['id', 'name', 'age', 'sex', 'time'])
 user1 = User(1, 'Marat', 18, 'male')
 user2 = User(2, 'Dayana', 18, 'female')
 
-data_obj.add_user(user1)
+# data_obj.add_user(user1)
 data_obj.add_user(user2)
-print(data_obj.get_user(1))
-data_obj.delete_user(2)
+#data_obj.delete_user("2")
+
